@@ -1,0 +1,5 @@
+# 顶部的注释是可选的
+root = true
+
+[*]
+end_of_line = lf
