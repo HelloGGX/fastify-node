@@ -1,0 +1,27 @@
+containers:
+  my-container:
+    image: alpine:3.11.3
+  build-fastify-env:
+    image: node:18.17.0
+    volumes:
+      - local: .
+        container: /code
+        options: cached # 文件将被缓存
+      - type: cache # 将容器内的 /code/node_modules 目录与一个缓存卷连接起来。这个缓存卷可以用于保存 Node.js 依赖，以减少容器重建时的依赖安装时间
+        name: node_modules
+        container: /code/node_modules
+    working_directory: /code # build-fastify-env
+
+tasks:
+  say-hello:
+    description: Say hello to the nice person reading the Batect documentation
+    run:
+      container: my-container
+      command: echo 'Hello world!'
+
+  # task for running fastify app
+  install-dep:
+    description: 下载该应用的所有依赖
+    run:
+      container: build-fastify-env
+      command: npm install
